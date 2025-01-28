@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta charset="UTF-8" />
+            <title>Shubham Prakash</title>
+            <meta name="description" content="Shubham Prakash's personal website" />
+        </head>
+        <body>
+            <h1>Personal Website</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>School</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in Data %}
+                    <tr>
+                        <td>{{ data['year'] }}</td>
+                        <td>{{ data['School'] }}</td>
+                        <td>{{ data['name'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </body>
+    </html>
