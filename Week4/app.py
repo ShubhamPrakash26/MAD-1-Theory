@@ -11,8 +11,6 @@ def index():
     if request.method == 'POST':
         id_type = request.form.get('ID')
         id_value = request.form.get('id_value')
-
-        # Read the CSV file
         try:
             df = pd.read_csv('data.csv', skipinitialspace=True)
         except Exception as e:
@@ -23,13 +21,10 @@ def index():
             return render_template('error.html', message="Please enter an ID value.")
 
         if id_type == 'student_id':
-            # Filter data for the specific student
             student_data = df[df['Student id'] == int(id_value)]
             
             if student_data.empty:
                 return render_template('error.html', message="Invalid Student ID!")
-            
-            # Prepare data for template
             records = []
             for _, row in student_data.iterrows():
                 records.append({
@@ -44,7 +39,6 @@ def index():
                                 total_marks=total_marks)
 
         elif id_type == 'course_id':
-            # Filter data for the specific course
             course_data = df[df['Course id'] == int(id_value)]
             
             if course_data.empty:
@@ -53,15 +47,11 @@ def index():
             marks = course_data['Marks']
             avg_marks = round(marks.mean(), 2)
             max_marks = marks.max()
-
-            # Create histogram
             plt.figure(figsize=(10, 6))
             plt.hist(marks, bins=10, edgecolor='black')
             plt.title(f'Marks Distribution for Course {id_value}')
             plt.xlabel('Marks')
             plt.ylabel('Frequency')
-            
-            # Save plot to base64 string
             img = io.BytesIO()
             plt.savefig(img, format='png', bbox_inches='tight')
             plt.close()
