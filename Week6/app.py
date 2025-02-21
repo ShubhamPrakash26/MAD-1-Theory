@@ -15,21 +15,17 @@ class Course(db.Model):
     course_name = db.Column(db.String, nullable=False)
     course_code = db.Column(db.String, unique=True, nullable=False)
     course_description = db.Column(db.String)
-
 class Student(db.Model):
     __tablename__ = 'student'
     student_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     roll_number = db.Column(db.String, unique=True, nullable=False)
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String)
-
 class Enrollment(db.Model):
     __tablename__ = 'enrollment'
     enrollment_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student.student_id'), nullable=False)
     course_id = db.Column(db.Integer, db.ForeignKey('course.course_id'), nullable=False)
-
-# Resources
 class CourseResource(Resource):
     def get(self, course_id):
         course = Course.query.get(course_id)
@@ -41,7 +37,6 @@ class CourseResource(Resource):
             course_code=course.course_code, 
             course_description=course.course_description
         )
-
     def put(self, course_id):
         data = request.get_json()
 
@@ -66,7 +61,6 @@ class CourseResource(Resource):
             course_code=course.course_code, 
             course_description=course.course_description
         )
-    
     def delete(self, course_id):
         course = Course.query.get(course_id)
         if not course:
@@ -74,7 +68,6 @@ class CourseResource(Resource):
         db.session.delete(course)
         db.session.commit()
         return make_response('', 200)
-    
     def post(self):
         data = request.get_json()
         
@@ -104,7 +97,6 @@ class CourseResource(Resource):
         )
         response.status_code = 201
         return response
-
 class StudentResource(Resource):
     def get(self, student_id):
         student = Student.query.get(student_id)
@@ -250,10 +242,6 @@ class EnrollmentResource(Resource):
         db.session.commit()
         
         return make_response('', 200)
-
-    
-
-# Endpoints
 api.add_resource(CourseResource, '/api/course', '/api/course/<int:course_id>')
 api.add_resource(StudentResource, '/api/student', '/api/student/<int:student_id>')
 api.add_resource(EnrollmentResource, '/api/student/<int:student_id>/course', '/api/student/<int:student_id>/course/<int:course_id>')
